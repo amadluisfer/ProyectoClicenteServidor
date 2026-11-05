@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// guarda todos los clientes y tiene las búsquedas
 public class RegistroClientes implements Serializable {
 
     // la llave es el id del cliente
@@ -15,6 +17,7 @@ public class RegistroClientes implements Serializable {
         clientes = new HashMap<>();
     }
 
+    // no deja registrar dos clientes con la misma identificación
     public void agregar(Cliente cliente) {
         if (existeIdentificacion(cliente.getIdentificacion())) {
             throw new IllegalArgumentException("Ya existe un cliente con la identificación indicada.");
@@ -35,6 +38,7 @@ public class RegistroClientes implements Serializable {
         return false;
     }
 
+    // se usa en la factura para buscar al cliente exacto
     public Cliente buscarPorIdentificacion(String identificacion) throws RegistroNoEncontradoException {
         for (Cliente c : clientes.values()) {
             if (c.getIdentificacion().equals(identificacion)) {
@@ -53,10 +57,12 @@ public class RegistroClientes implements Serializable {
                 resultado.add(c);
             }
         }
+        // se ordenan por nombre con una expresión lambda
         resultado.sort((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()));
         return resultado;
     }
 
+    // con el texto vacío todos coinciden, entonces devuelve la lista completa
     public List<Cliente> listar() {
         return buscar("");
     }

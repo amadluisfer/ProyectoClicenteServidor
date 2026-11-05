@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
     protected int stockMinimo;
     protected boolean activo;
 
+    // constructor con los datos que tienen todos los productos, las subclases lo llaman con super()
     public Producto(String codigo, String nombre, Categoria categoria, double valorCompra,
             double valorVenta, int existencias, int stockMinimo) {
         this.codigo = codigo;
@@ -31,6 +33,7 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
 
     public abstract String obtenerTipo();
 
+    // se usa al emitir la factura, si no alcanza el stock lanza la excepción
     public void descontarExistencias(int cantidad) throws StockInsuficienteException {
         if (cantidad > existencias) {
             throw new StockInsuficienteException("Stock insuficiente de " + nombre + ": hay " + existencias + " unidades.");
@@ -38,10 +41,12 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
         existencias -= cantidad;
     }
 
+    // para la alerta de stock bajo
     public boolean necesitaReabastecer() {
         return existencias <= stockMinimo;
     }
 
+    // implementación de Mostrable, el tipo y el IVA dependen de la subclase (polimorfismo)
     @Override
     public String mostrarInformacion() {
         return codigo + " - " + nombre + " (" + obtenerTipo() + ") precio: " + valorVenta
@@ -54,6 +59,7 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
         return nombre.compareToIgnoreCase(otro.nombre);
     }
 
+    // Getters y Setters
     public String getCodigo() {
         return codigo;
     }

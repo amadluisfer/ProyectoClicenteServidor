@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ public class DetalleFactura implements Mostrable, Serializable {
     private int cantidad;
     private double precioUnitario;
 
+    // el precio se guarda al momento de la venta, así si después cambia no afecta la factura
     public DetalleFactura(Producto producto, int cantidad) {
         this.producto = producto;
         this.cantidad = cantidad;
@@ -25,12 +27,14 @@ public class DetalleFactura implements Mostrable, Serializable {
         return conDescuento * producto.obtenerPorcentajeImpuesto();
     }
 
+    // implementación de Mostrable, arma la línea con formato de columnas para la factura
     @Override
     public String mostrarInformacion() {
         return String.format("%4d  %-28s %14s %14s", cantidad, producto.getNombre(),
                 Factura.formatearMonto(precioUnitario), Factura.formatearMonto(calcularSubtotal()));
     }
 
+    // Getters y Setters
     public Producto getProducto() {
         return producto;
     }

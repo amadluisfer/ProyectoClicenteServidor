@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+// clase principal de la venta, tiene el cliente, el vendedor y la lista de detalles
 public class Factura implements Mostrable, Serializable {
 
     private int numero;
@@ -21,6 +23,7 @@ public class Factura implements Mostrable, Serializable {
     private double porcentajeDescuento;
     private List<DetalleFactura> detalles;
 
+    // el número y la fecha se ponen hasta que se emite
     public Factura(Usuario vendedor) {
         this.vendedor = vendedor;
         this.metodoPago = MetodoPago.EFECTIVO;
@@ -54,6 +57,7 @@ public class Factura implements Mostrable, Serializable {
         detalles.remove(indice);
     }
 
+    // suma de todas las líneas sin impuesto
     public double calcularSubtotal() {
         double suma = 0;
         for (DetalleFactura d : detalles) {
@@ -66,6 +70,7 @@ public class Factura implements Mostrable, Serializable {
         return calcularSubtotal() * porcentajeDescuento / 100;
     }
 
+    // cada línea calcula su IVA según el tipo de producto
     public double calcularImpuesto() {
         double suma = 0;
         for (DetalleFactura d : detalles) {
@@ -74,10 +79,12 @@ public class Factura implements Mostrable, Serializable {
         return suma;
     }
 
+    // total = subtotal - descuento + IVA
     public double calcularTotal() {
         return calcularSubtotal() - calcularDescuento() + calcularImpuesto();
     }
 
+    // la factura no se borra, solo cambia de estado
     public void anular() {
         estado = EstadoFactura.ANULADA;
     }
@@ -86,10 +93,12 @@ public class Factura implements Mostrable, Serializable {
         return String.format("FC-%06d", numero);
     }
 
+    // es static para poder usarlo desde las ventanas sin tener una factura, formato en colones
     public static String formatearMonto(double monto) {
         return String.format("₡%,.2f", monto);
     }
 
+    // implementación de Mostrable, arma el texto completo de la factura con encabezado, líneas y totales
     @Override
     public String mostrarInformacion() {
         String linea = "=".repeat(66) + "\n";
@@ -125,6 +134,7 @@ public class Factura implements Mostrable, Serializable {
         return archivo.getAbsolutePath();
     }
 
+    // Getters y Setters
     public int getNumero() {
         return numero;
     }

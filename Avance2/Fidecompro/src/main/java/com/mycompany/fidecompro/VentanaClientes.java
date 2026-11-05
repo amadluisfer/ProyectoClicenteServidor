@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Color;
 import java.time.format.DateTimeFormatter;
@@ -16,11 +17,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-// registrar, buscar, modificar y eliminar clientes (HU 3)
+// ventana para registrar, buscar, modificar y eliminar clientes
 public class VentanaClientes extends JFrame {
 
     private Usuario usuario;
     private Cliente seleccionado;
+    // la lista que se está mostrando en la tabla, sirve para saber qué cliente se seleccionó
     private List<Cliente> listaActual;
 
     private JComboBox<TipoIdentificacion> cmbTipo;
@@ -47,6 +49,7 @@ public class VentanaClientes extends JFrame {
         cargarTabla(Datos.clientes.listar());
     }
 
+    // formulario arriba, buscador y tabla abajo
     private void iniciarComponentes() {
         JPanel datos = new JPanel(null);
         datos.setBorder(BorderFactory.createTitledBorder("Datos del cliente"));
@@ -97,6 +100,7 @@ public class VentanaClientes extends JFrame {
         ayuda.setBounds(450, 240, 300, 25);
         add(ayuda);
 
+        // se sobreescribe isCellEditable para que la tabla sea solo de lectura
         modelo = new DefaultTableModel(new String[]{"Identificación", "Nombre", "Teléfono", "Correo", "Registro", "Estado"}, 0) {
             @Override
             public boolean isCellEditable(int fila, int col) {
@@ -123,6 +127,7 @@ public class VentanaClientes extends JFrame {
             cargarTabla(Datos.clientes.listar());
         });
         btnBuscar.addActionListener(e -> buscar());
+        // al seleccionar una fila se cargan sus datos en el formulario
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabla.getSelectedRow() >= 0) {
                 cargarFormulario(listaActual.get(tabla.getSelectedRow()));
@@ -150,6 +155,7 @@ public class VentanaClientes extends JFrame {
         return b;
     }
 
+    // limpia la tabla y la vuelve a llenar con la lista que recibe
     private void cargarTabla(List<Cliente> lista) {
         listaActual = lista;
         modelo.setRowCount(0);
@@ -225,6 +231,7 @@ public class VentanaClientes extends JFrame {
         }
     }
 
+    // si no hay seleccionado se registra uno nuevo, si hay se modifica ese
     private void guardar() {
         try {
             validar();
@@ -253,6 +260,7 @@ public class VentanaClientes extends JFrame {
         }
     }
 
+    // pide confirmación antes de eliminar
     private void eliminar() {
         if (seleccionado == null) {
             JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla.");

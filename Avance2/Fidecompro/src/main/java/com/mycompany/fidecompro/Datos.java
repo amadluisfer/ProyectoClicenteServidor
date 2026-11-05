@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import javax.swing.JOptionPane;
 // guarda en memoria todo lo del sistema mientras el programa esta abierto
 public class Datos {
 
+    // son static para poder usarlos desde cualquier ventana sin pasar objetos
     public static RegistroUsuarios usuarios = new RegistroUsuarios();
     public static RegistroClientes clientes = new RegistroClientes();
     public static RegistroFacturas facturas = new RegistroFacturas();

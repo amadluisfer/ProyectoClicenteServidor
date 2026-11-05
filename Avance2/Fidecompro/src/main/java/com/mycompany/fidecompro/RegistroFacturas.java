@@ -1,9 +1,11 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.TreeMap;
 
+// guarda las facturas emitidas
 public class RegistroFacturas implements Serializable {
 
     // TreeMap para que queden ordenadas por numero
@@ -31,6 +33,7 @@ public class RegistroFacturas implements Serializable {
         for (DetalleFactura d : factura.getDetalles()) {
             d.getProducto().descontarExistencias(d.getCantidad());
         }
+        // el número sigue después de la última factura guardada
         int siguiente = facturas.isEmpty() ? 1 : facturas.lastKey() + 1;
         factura.setNumero(siguiente);
         factura.setFecha(LocalDateTime.now());
@@ -38,6 +41,7 @@ public class RegistroFacturas implements Serializable {
         facturas.put(siguiente, factura);
     }
 
+    // para saber si se puede borrar el cliente o solo desactivarlo
     public boolean clienteTieneFacturas(Cliente cliente) {
         for (Factura f : facturas.values()) {
             if (f.getCliente().getId() == cliente.getId()) {
@@ -47,6 +51,7 @@ public class RegistroFacturas implements Serializable {
         return false;
     }
 
+    // igual que con los clientes pero para los productos
     public boolean productoEnFacturas(Producto producto) {
         for (Factura f : facturas.values()) {
             for (DetalleFactura d : f.getDetalles()) {
@@ -62,6 +67,7 @@ public class RegistroFacturas implements Serializable {
         return facturas.size();
     }
 
+    // para el resumen del menú, no cuenta las anuladas
     public double totalVendido() {
         double total = 0;
         for (Factura f : facturas.values()) {

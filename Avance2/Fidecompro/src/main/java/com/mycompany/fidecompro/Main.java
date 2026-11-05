@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -16,6 +17,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "No se pudo leer el archivo de datos, se cargan los datos de prueba.");
             Datos.cargarDatosDePrueba();
         }
+        // lo primero que se muestra es el inicio de sesión
         new VentanaLogin().setVisible(true);
     }
 }

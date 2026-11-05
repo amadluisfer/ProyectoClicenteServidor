@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,10 +20,11 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-// crear una factura a un cliente (HU 8)
+// ventana para crear una factura a un cliente
 public class VentanaFactura extends JFrame {
 
     private Usuario usuario;
+    // la factura que se está armando, se crea una nueva cada vez que se emite o se cancela
     private Factura factura;
 
     private JTextField txtCliente;
@@ -47,6 +49,7 @@ public class VentanaFactura extends JFrame {
         iniciarComponentes();
     }
 
+    // paneles de cliente y producto, la tabla de líneas y el cuadro de totales
     private void iniciarComponentes() {
         JPanel pCliente = new JPanel(null);
         pCliente.setBorder(BorderFactory.createTitledBorder("Cliente"));
@@ -150,6 +153,7 @@ public class VentanaFactura extends JFrame {
         btnCancelar.addActionListener(e -> nuevaFactura());
         btnEmitir.addActionListener(e -> emitir());
         txtDescuento.addActionListener(e -> actualizarTotales());
+        // al salir del campo del descuento se recalculan los totales
         txtDescuento.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -172,6 +176,7 @@ public class VentanaFactura extends JFrame {
         return l;
     }
 
+    // busca por identificación y no deja facturar a clientes inactivos
     private void buscarCliente() {
         try {
             Cliente c = Datos.clientes.buscarPorIdentificacion(txtCliente.getText().trim());
@@ -202,6 +207,7 @@ public class VentanaFactura extends JFrame {
         }
     }
 
+    // valida el producto y la cantidad, el stock lo revisa la factura al agregar el detalle
     private void agregarProducto() {
         try {
             Producto p = Datos.inventario.buscarProducto(txtCodigo.getText().trim());
@@ -235,6 +241,7 @@ public class VentanaFactura extends JFrame {
         cargarLineas();
     }
 
+    // vuelve a llenar la tabla con las líneas de la factura, el total de cada línea ya lleva IVA
     private void cargarLineas() {
         modelo.setRowCount(0);
         int i = 1;
@@ -248,6 +255,7 @@ public class VentanaFactura extends JFrame {
         actualizarTotales();
     }
 
+    // si el descuento no es un número se toma como 0
     private void actualizarTotales() {
         try {
             factura.setPorcentajeDescuento(Double.parseDouble(txtDescuento.getText().trim()));
@@ -261,12 +269,14 @@ public class VentanaFactura extends JFrame {
         lblTotal.setText(Factura.formatearMonto(factura.calcularTotal()));
     }
 
+    // el registro de facturas valida, descuenta el stock y le pone el número
     private void emitir() {
         try {
             factura.setPorcentajeDescuento(Double.parseDouble(txtDescuento.getText().trim()));
             factura.setMetodoPago((MetodoPago) cmbPago.getSelectedItem());
             Datos.facturas.emitir(factura);
             Datos.guardarCambios();
+            // se guarda la referencia antes de limpiar para poder mostrarla
             Factura emitida = factura;
             nuevaFactura();
             new VentanaVistaFactura(this, emitida).setVisible(true);
@@ -288,6 +298,7 @@ public class VentanaFactura extends JFrame {
         cargarLineas();
     }
 
+    // lo usa el menú al cerrar sesión
     public boolean tieneLineasSinEmitir() {
         return !factura.getDetalles().isEmpty();
     }

@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,13 +13,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-// ventana de inicio de sesion (HU 1)
+// ventana de inicio de sesión, después de 3 intentos fallidos se bloquea un minuto
 public class VentanaLogin extends JFrame {
 
     private JTextField txtUsuario;
     private JPasswordField txtContrasena;
     private JLabel lblMensaje;
     private JButton btnIngresar;
+    // cuenta los intentos fallidos seguidos
     private int intentosFallidos = 0;
 
     public VentanaLogin() {
@@ -31,6 +33,7 @@ public class VentanaLogin extends JFrame {
         iniciarComponentes();
     }
 
+    // arma la ventana con posiciones fijas (layout null)
     private void iniciarComponentes() {
         JLabel lblTitulo = new JLabel("FIDECOMPRO", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
@@ -76,11 +79,13 @@ public class VentanaLogin extends JFrame {
         lblPrueba.setBackground(new Color(225, 230, 240));
         add(lblPrueba);
 
+        // se puede entrar con el botón o con Enter
         btnIngresar.addActionListener(e -> ingresar());
         txtContrasena.addActionListener(e -> ingresar());
         getRootPane().setDefaultButton(btnIngresar);
     }
 
+    // valida que no estén vacíos, si están vacíos se pintan de rojo
     private void ingresar() {
         String usuario = txtUsuario.getText().trim();
         String clave = new String(txtContrasena.getPassword());
@@ -99,6 +104,7 @@ public class VentanaLogin extends JFrame {
         }
 
         try {
+            // si las credenciales son correctas se abre el menú con ese usuario
             Usuario u = Datos.usuarios.iniciarSesion(usuario, clave);
             intentosFallidos = 0;
             new VentanaMenu(u).setVisible(true);
@@ -118,6 +124,7 @@ public class VentanaLogin extends JFrame {
     private void bloquear() {
         lblMensaje.setText("Demasiados intentos fallidos. Intente de nuevo en 1 minuto.");
         btnIngresar.setEnabled(false);
+        // Timer de swing, a los 60 segundos vuelve a habilitar el botón
         Timer timer = new Timer(60000, e -> {
             btnIngresar.setEnabled(true);
             intentosFallidos = 0;

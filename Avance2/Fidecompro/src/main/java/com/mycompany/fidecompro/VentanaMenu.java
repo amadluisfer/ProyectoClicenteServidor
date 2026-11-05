@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-// menu principal con el resumen del dia y la alerta de stock bajo (HU 7)
+// menú principal con el resumen del día y la alerta de stock bajo
 public class VentanaMenu extends JFrame {
 
     private Usuario usuario;
@@ -46,6 +47,7 @@ public class VentanaMenu extends JFrame {
         });
     }
 
+    // barra de menú, botones grandes de acceso y el panel del resumen
     private void iniciarComponentes() {
         JMenuBar barra = new JMenuBar();
         JMenu archivo = new JMenu("Archivo");
@@ -114,6 +116,7 @@ public class VentanaMenu extends JFrame {
         return l;
     }
 
+    // crea cada botón grande del menú, según el título abre la ventana que corresponde
     private JButton crearMosaico(String titulo, String detalle, int x, int y) {
         JButton b = new JButton("<html><center><font size=5><b>" + titulo + "</b></font><br><br>" + detalle + "</center></html>");
         b.setBounds(x, y, 222, 215);
@@ -145,6 +148,7 @@ public class VentanaMenu extends JFrame {
         ventanaFactura.toFront();
     }
 
+    // actualiza los totales y la lista de productos bajo el mínimo
     public void cargarResumen() {
         lblFacturas.setText(String.valueOf(Datos.facturas.cantidad()));
         lblTotal.setText(Factura.formatearMonto(Datos.facturas.totalVendido()));
@@ -156,6 +160,7 @@ public class VentanaMenu extends JFrame {
             lblProductosBajos.setText("");
         } else {
             lblAlerta.setText("⚠ " + bajos.size() + " productos bajo el stock mínimo");
+            // se usa html en el label para poder poner varias líneas
             String nombres = "<html>";
             for (Producto p : bajos) {
                 nombres += p.getNombre() + " (" + p.getExistencias() + ")<br>";
@@ -164,6 +169,7 @@ public class VentanaMenu extends JFrame {
         }
     }
 
+    // si hay una factura a medias pregunta antes de cerrar
     private void cerrarSesion() {
         if (ventanaFactura != null && ventanaFactura.isDisplayable() && ventanaFactura.tieneLineasSinEmitir()) {
             int r = JOptionPane.showConfirmDialog(this, "Tiene una factura sin emitir. ¿Desea descartarla y cerrar sesión?",

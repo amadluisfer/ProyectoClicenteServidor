@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Inventario implements Serializable {
         return categorias;
     }
 
+    // recorre cada categoría y sus productos, si no lo encuentra lanza la excepción
     public Producto buscarProducto(String codigo) throws RegistroNoEncontradoException {
         for (Categoria c : categorias) {
             for (Producto p : c.getProductos()) {
@@ -33,6 +35,7 @@ public class Inventario implements Serializable {
         throw new RegistroNoEncontradoException("No existe un producto con el código " + codigo + ".");
     }
 
+    // reutiliza buscarProducto para validar que no se repita el código
     public boolean existeCodigo(String codigo) {
         try {
             buscarProducto(codigo);
@@ -42,6 +45,7 @@ public class Inventario implements Serializable {
         }
     }
 
+    // el producto se guarda dentro de la lista de su categoría
     public void agregarProducto(Producto producto) {
         producto.getCategoria().agregarProducto(producto);
     }
@@ -60,6 +64,7 @@ public class Inventario implements Serializable {
         return lista;
     }
 
+    // solo los activos que llegaron al mínimo, ordenados con ComparadorPorExistencias
     public List<Producto> productosBajoMinimo() {
         List<Producto> lista = new ArrayList<>();
         for (Producto p : listarProductos()) {

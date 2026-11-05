@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Font;
 import java.io.File;
@@ -11,11 +12,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-// muestra la factura emitida y permite guardarla en un archivo .txt (HU 10)
+// muestra la factura emitida y permite guardarla en un archivo .txt
 public class VentanaVistaFactura extends JDialog {
 
     private Factura factura;
 
+    // es modal (true) para que no se pueda usar la otra ventana mientras está abierta
     public VentanaVistaFactura(JFrame padre, Factura factura) {
         super(padre, "Factura " + factura.getNumeroFormateado(), true);
         this.factura = factura;
@@ -42,6 +44,7 @@ public class VentanaVistaFactura extends JDialog {
         btnCerrar.addActionListener(e -> dispose());
     }
 
+    // se elige solo la carpeta, el nombre del archivo es el número de la factura
     private void guardarArchivo() {
         JFileChooser selector = new JFileChooser();
         selector.setDialogTitle("Seleccione la carpeta donde guardar la factura");

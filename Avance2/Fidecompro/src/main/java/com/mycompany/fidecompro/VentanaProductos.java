@@ -1,4 +1,5 @@
 package com.mycompany.fidecompro;
+//Estudiante: Luis Fernando Amador Ríos
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-// registro de productos de los tres tipos (HU 5) y pestaña de los que estan bajo el minimo (HU 7)
+// registro de productos de los tres tipos y pestaña de los que están bajo el mínimo
 public class VentanaProductos extends JFrame {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -36,6 +37,7 @@ public class VentanaProductos extends JFrame {
     private JComboBox<Categoria> cmbCategoria;
     private JTextField txtCodigo, txtNombre, txtCompra, txtVenta, txtExistencias, txtMinimo;
     private JLabel lblIva;
+    // panel que cambia según el tipo de producto
     private JPanel panelEspecifico;
     // abarrote
     private JTextField txtVencimiento;
@@ -66,6 +68,7 @@ public class VentanaProductos extends JFrame {
         cargarTabla();
     }
 
+    // dos pestañas: el registro de productos y los que están bajo el mínimo
     private void iniciarComponentes() {
         pestanas = new JTabbedPane();
         pestanas.setBounds(10, 10, 1035, 695);
@@ -76,7 +79,7 @@ public class VentanaProductos extends JFrame {
         JPanel pBajos = new JPanel(null);
         pestanas.addTab("Bajo el mínimo", pBajos);
 
-        // ---- formulario
+        // formulario con los datos del producto
         JPanel datos = new JPanel(null);
         datos.setBorder(BorderFactory.createTitledBorder("Datos del producto"));
         datos.setBounds(5, 5, 1015, 345);
@@ -137,7 +140,7 @@ public class VentanaProductos extends JFrame {
         btnGuardar.setEnabled(usuario.esAdministrador());
         btnEliminar.setEnabled(usuario.esAdministrador());
 
-        // ---- filtro y tabla
+        // filtro por categoría y tabla
         pProductos.add(etiqueta("Filtrar por categoría:", 10, 360));
         cmbFiltro = new JComboBox<>();
         cmbFiltro.addItem("Todas");
@@ -160,12 +163,13 @@ public class VentanaProductos extends JFrame {
         };
         tabla = new JTable(modelo);
         tabla.getColumnModel().getColumn(1).setPreferredWidth(220);
+        // la columna de estado usa un render propio para pintar en rojo
         tabla.getColumnModel().getColumn(7).setCellRenderer(new RenderEstado());
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(5, 395, 1015, 265);
         pProductos.add(scroll);
 
-        // ---- pestaña bajo el minimo
+        // pestaña de bajo el mínimo
         JLabel lblBajos = new JLabel("Productos con existencias menores o iguales al mínimo, de menos a más existencias.");
         lblBajos.setBounds(10, 10, 700, 25);
         pBajos.add(lblBajos);
@@ -249,6 +253,7 @@ public class VentanaProductos extends JFrame {
         panelEspecifico.repaint();
     }
 
+    // si x es null es una etiqueta que ya trae su posición
     private void agregarEspecifico(Component c, Integer x, int ancho) {
         if (x != null) {
             c.setBounds(x, 35, ancho, 25);
@@ -256,11 +261,13 @@ public class VentanaProductos extends JFrame {
         panelEspecifico.add(c);
     }
 
+    // muestra cuánto IVA va a pagar según el tipo y si es canasta básica
     private void actualizarIva() {
         boolean uno = cmbTipo.getSelectedItem().equals("Abarrote") && chkCanasta.isSelected();
         lblIva.setText("Este producto pagará IVA de " + (uno ? "1" : "13") + " %");
     }
 
+    // aplica el filtro de categoría y el texto de búsqueda, y también refresca la pestaña de bajo mínimo
     private void cargarTabla() {
         String texto = txtBuscar.getText().trim().toLowerCase();
         Object filtro = cmbFiltro.getSelectedItem();
@@ -287,6 +294,7 @@ public class VentanaProductos extends JFrame {
         lblEstado.setText(" " + listaActual.size() + " productos · ordenados por nombre · \"Bajo el mínimo\" ordena por existencias");
     }
 
+    // con instanceof se sabe qué tipo de producto es para llenar sus datos propios
     private void cargarFormulario(Producto p) {
         seleccionado = p;
         cmbTipo.setSelectedItem(p instanceof ArticuloHogar ? "Artículo de hogar" : p.obtenerTipo());
@@ -332,6 +340,7 @@ public class VentanaProductos extends JFrame {
         actualizarIva();
     }
 
+    // valida los datos y según el tipo elegido se crea el objeto de la subclase correcta
     private void guardar() {
         Color rojo = new Color(255, 220, 220);
         txtCodigo.setBackground(Color.WHITE);
@@ -353,6 +362,7 @@ public class VentanaProductos extends JFrame {
                 txtCodigo.setBackground(rojo);
                 throw new IllegalArgumentException("Ya existe un producto con ese código.");
             }
+            // no se puede vender más barato de lo que se compró
             if (venta <= 0 || venta < compra) {
                 txtVenta.setBackground(rojo);
                 throw new IllegalArgumentException("El valor de venta debe ser mayor que 0 y no menor que el valor de compra.");
@@ -413,6 +423,7 @@ public class VentanaProductos extends JFrame {
         if (r != JOptionPane.YES_OPTION) {
             return;
         }
+        // si ya se vendió no se borra, se desactiva para no perder el historial
         if (Datos.facturas.productoEnFacturas(seleccionado)) {
             seleccionado.setActivo(false);
             JOptionPane.showMessageDialog(this, "El producto ya aparece en facturas, se desactivó para que no se pueda vender.");
