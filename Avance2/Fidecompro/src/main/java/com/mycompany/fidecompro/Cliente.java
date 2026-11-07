@@ -4,7 +4,7 @@ package com.mycompany.fidecompro;
 import java.time.LocalDate;
 
 // hereda de Persona, se le agregan el id, la dirección y si está activo
-public class Cliente extends Persona {
+public class Cliente extends Persona implements Comparable<Cliente> {
 
     // es static para que todos los clientes compartan el mismo contador y no se repita el id
     private static int contador = 1;
@@ -23,7 +23,7 @@ public class Cliente extends Persona {
         this.fechaRegistro = LocalDate.now();
     }
 
-    // al leer el archivo el contador vuelve a 1, por eso se ajusta
+   // permite ajustar el contador después de leer el archivo, para que los nuevos clientes sigan con el siguiente id y no se repitan
     public static void actualizarContador(int ultimoId) {
         if (ultimoId >= contador) {
             contador = ultimoId + 1;
@@ -59,5 +59,11 @@ public class Cliente extends Persona {
 
     public LocalDate getFechaRegistro() {
         return fechaRegistro;
+    }
+
+    // permite ordenar los clientes por nombre
+    @Override
+    public int compareTo(Cliente otro) {
+        return nombre.compareToIgnoreCase(otro.nombre);
     }
 }

@@ -3,6 +3,7 @@ package com.mycompany.fidecompro;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class RegistroClientes implements Serializable {
             }
         }
         // se ordenan por nombre con una expresión lambda
-        resultado.sort((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()));
+        Collections.sort(resultado);
         return resultado;
     }
 

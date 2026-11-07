@@ -3,14 +3,14 @@ package com.mycompany.fidecompro;
 
 import java.io.Serializable;
 
-// una linea de la factura
+// una linea de la factura, cada producto vendido dentro de una factura, con su cantidad y precio
 public class DetalleFactura implements Mostrable, Serializable {
 
     private Producto producto;
     private int cantidad;
     private double precioUnitario;
 
-    // el precio se guarda al momento de la venta, así si después cambia no afecta la factura
+    // se guarda una copia del precio al momento de la venta para que la factura no cambie si luego cambia el precio del producto
     public DetalleFactura(Producto producto, int cantidad) {
         this.producto = producto;
         this.cantidad = cantidad;
@@ -21,13 +21,13 @@ public class DetalleFactura implements Mostrable, Serializable {
         return cantidad * precioUnitario;
     }
 
-    // el IVA se calcula sobre el monto ya con descuento
+    // el IVA aqui se calcula sobre el monto ya con el descuento
     public double calcularImpuesto(double porcentajeDescuento) {
         double conDescuento = calcularSubtotal() * (1 - porcentajeDescuento / 100);
         return conDescuento * producto.obtenerPorcentajeImpuesto();
     }
 
-    // implementación de Mostrable, arma la línea con formato de columnas para la factura
+    // implementación de Mostrable, arma la línea con formato de columnas para la factura que se va a emitir
     @Override
     public String mostrarInformacion() {
         return String.format("%4d  %-28s %14s %14s", cantidad, producto.getNombre(),

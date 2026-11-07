@@ -9,13 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 // clase que se encarga de la serializacion de los datos del sistema
-// guarda y lee los usuarios, clientes, inventario y facturas en fidecompro.dat
+// Guarda y lee los usuarios, clientes, inventario y facturas en el archivo fidecompro.dat
 public class ArchivoDatos {
 
-    // el archivo se crea en la carpeta donde se ejecuta el proyecto
+    // por el momento el archivo se crea en la carpeta donde se ejecuta el proyecto
     private static final String NOMBRE_ARCHIVO = "fidecompro.dat";
 
-    // se escriben los cuatro objetos en el mismo orden en que se leen
+    // se escriben los cuatro objetos con el mismo orden en que se leen
     public static void guardar() throws IOException {
         try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(NOMBRE_ARCHIVO))) {
             salida.writeObject(Datos.usuarios);
@@ -25,7 +25,7 @@ public class ArchivoDatos {
         }
     }
 
-    // devuelve false si el archivo todavia no existe
+    // Aqui devuelve "false" si el archivo todavia no existe.
     public static boolean cargar() throws IOException, ClassNotFoundException {
         File archivo = new File(NOMBRE_ARCHIVO);
         if (!archivo.exists()) {
@@ -37,7 +37,7 @@ public class ArchivoDatos {
             Datos.inventario = (Inventario) entrada.readObject();
             Datos.facturas = (RegistroFacturas) entrada.readObject();
         }
-        // para que los clientes nuevos no repitan id
+        // para que los clientes nuevos no repitan id y con esto se asegura que tengna un identificador unico 
         for (Cliente c : Datos.clientes.listar()) {
             Cliente.actualizarContador(c.getId());
         }

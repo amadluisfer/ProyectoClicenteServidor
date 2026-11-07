@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-// clase principal de la venta, tiene el cliente, el vendedor y la lista de detalles
+// clase principal de la venta, tiene al cliente, el vendedor y tambien contiene lista de detalles 
 public class Factura implements Mostrable, Serializable {
 
     private int numero;
@@ -23,16 +23,18 @@ public class Factura implements Mostrable, Serializable {
     private double porcentajeDescuento;
     private List<DetalleFactura> detalles;
 
-    // el número y la fecha se ponen hasta que se emite
+    // crea la factura con el vendedor, pago en efectivo y sin productos
     public Factura(Usuario vendedor) {
         this.vendedor = vendedor;
         this.metodoPago = MetodoPago.EFECTIVO;
         this.detalles = new ArrayList<>();
     }
 
-    // si el producto ya esta en la factura se suma a la misma linea
+    // agrega un producto a la factura, si ya estaba se suma la cantidad en la misma línea 
+    // y siempre se valida que haya stock suficiente al momento de agregar el producto 
     public void agregarDetalle(Producto producto, int cantidad) throws StockInsuficienteException {
         DetalleFactura existente = null;
+        //// busca si el producto ya está en la factura
         for (DetalleFactura d : detalles) {
             if (d.getProducto().getCodigo().equals(producto.getCodigo())) {
                 existente = d;
@@ -42,10 +44,13 @@ public class Factura implements Mostrable, Serializable {
         if (existente != null) {
             total += existente.getCantidad();
         }
+        
+       
         if (total > producto.getExistencias()) {
-            throw new StockInsuficienteException("Stock insuficiente de " + producto.getNombre()
+            throw new StockInsuficienteException("Stock insuficiente de " + producto.getNombre() //// si no hay suficientes existencias lanza la excepción
                     + ": hay " + producto.getExistencias() + " unidades.");
         }
+        
         if (existente != null) {
             existente.setCantidad(total);
         } else {

@@ -1,13 +1,13 @@
 package com.mycompany.fidecompro;
 //Estudiante: Luis Fernando Amador Ríos
 
-// hereda de Producto, se le agregan el volumen y si es retornable
+// hereda de Producto, se le agregan el volumen y si es tipo retornable
 public class Bebida extends Producto {
 
     private int volumenMl;
     private boolean retornable;
 
-    // los datos en común se envían a Producto y los últimos dos son de la bebida
+    // los datos en comn se envían a Producto, los últimos dos son para las bebidas
     public Bebida(String codigo, String nombre, Categoria categoria, double valorCompra, double valorVenta,
             int existencias, int stockMinimo, int volumenMl, boolean retornable) {
         super(codigo, nombre, categoria, valorCompra, valorVenta, existencias, stockMinimo);
@@ -15,7 +15,7 @@ public class Bebida extends Producto {
         this.retornable = retornable;
     }
 
-    // las bebidas siempre pagan 13% de IVA
+    // las bebidas siempre pagan al 13% de IVA
     @Override
     public double obtenerPorcentajeImpuesto() {
         return 0.13;

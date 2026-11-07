@@ -219,16 +219,46 @@ public class VentanaClientes extends JFrame {
             throw new IllegalArgumentException("Debe completar los campos obligatorios.");
         }
         // fisica X-XXXX-XXXX y juridica X-XXX-XXXXXX
-        String formato = cmbTipo.getSelectedItem() == TipoIdentificacion.FISICA ? "\\d-\\d{4}-\\d{4}" : "\\d-\\d{3}-\\d{6}";
-        if (!txtIdentificacion.getText().trim().matches(formato)) {
+        boolean fisica = cmbTipo.getSelectedItem() == TipoIdentificacion.FISICA;
+        if (!identificacionValida(txtIdentificacion.getText().trim(), fisica)) {
             txtIdentificacion.setBackground(rojo);
             throw new IllegalArgumentException("Formato de identificación inválido (física X-XXXX-XXXX, jurídica X-XXX-XXXXXX).");
         }
         String correo = txtCorreo.getText().trim();
-        if (!correo.isEmpty() && !correo.matches("[\\w.+-]+@[\\w-]+\\.[\\w.]+")) {
+        if (!correo.isEmpty() && !correoValido(correo)) {
             txtCorreo.setBackground(rojo);
             throw new IllegalArgumentException("Formato de correo electrónico inválido.");
         }
+    }
+
+    // permite revisar que la identificación tenga los guiones en su lugar y el resto sean números
+    private boolean identificacionValida(String id, boolean fisica) {
+        int largo = fisica ? 11 : 12;
+        int segundoGuion = fisica ? 6 : 5;
+        if (id.length() != largo) {
+            return false;
+        }
+        for (int i = 0; i < id.length(); i++) {
+            char c = id.charAt(i);
+            if (i == 1 || i == segundoGuion) {
+                if (c != '-') {
+                    return false;
+                }
+            } else if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // permite revisar que el correo tenga algo antes del @ y un punto después del @
+    private boolean correoValido(String correo) {
+        int arroba = correo.indexOf('@');
+        if (arroba < 1) {
+            return false;
+        }
+        int punto = correo.indexOf('.', arroba + 2);
+        return punto != -1 && punto < correo.length() - 1;
     }
 
     // si no hay seleccionado se registra uno nuevo, si hay se modifica ese

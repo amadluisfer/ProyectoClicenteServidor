@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
-// guarda en memoria todo lo del sistema mientras el programa esta abierto
+// mantiene  en memoria todo lo del sistema mientras el programa esta abierto
 public class Datos {
 
-    // son static para poder usarlos desde cualquier ventana sin pasar objetos
+    // son static para que todas las ventanas compartan los mismos datos
     public static RegistroUsuarios usuarios = new RegistroUsuarios();
     public static RegistroClientes clientes = new RegistroClientes();
     public static RegistroFacturas facturas = new RegistroFacturas();
@@ -23,7 +23,7 @@ public class Datos {
         }
     }
 
-    // datos de prueba para no empezar vacio
+    // datos de ejemplo simulando que el sistema ya tienda datos
     public static void cargarDatosDePrueba() {
         usuarios.agregar(new Usuario("María Rodríguez", "8888-0001", "mrodriguez@fidecompro.cr", "1-0452-0981",
                 "mrodriguez", "Admin2026", Rol.ADMINISTRADOR));

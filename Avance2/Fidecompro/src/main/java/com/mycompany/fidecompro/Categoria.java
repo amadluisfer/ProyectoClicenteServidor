@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// cada categoría guarda su propia lista de productos
+//cada categoría guarda su propia lista de productos
 public class Categoria implements Serializable {
 
     private String nombre;
@@ -20,9 +20,14 @@ public class Categoria implements Serializable {
         productos.add(producto);
     }
 
-    // quita el producto que tenga ese código
+    // permite quitar de la lista de la categoría el producto según el código que se recibe por parámetro
     public void eliminarProducto(String codigo) {
-        productos.removeIf(p -> p.getCodigo().equalsIgnoreCase(codigo));
+        for (int i = 0; i < productos.size(); i++) {
+            if (productos.get(i).getCodigo().equalsIgnoreCase(codigo)) {
+                productos.remove(i);
+                break;
+            }
+        }
     }
 
     public String getNombre() {
@@ -33,7 +38,7 @@ public class Categoria implements Serializable {
         return productos;
     }
 
-    // para que el combo muestre el nombre
+    // permite que en las listas de categorías se muestre el nombre de la categoría
     @Override
     public String toString() {
         return nombre;
