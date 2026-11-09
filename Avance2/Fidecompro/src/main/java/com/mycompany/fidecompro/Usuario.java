@@ -1,7 +1,8 @@
 package com.mycompany.fidecompro;
 //Estudiante: Luis Fernando Amador Ríos
 
-// hereda de Persona, son los que inician sesión en el sistema (administrador o vendedor)
+// hereda de Persona, son los tipos de usuario que 
+//inician sesión en el sistema (administrador o vendedor)
 public class Usuario extends Persona {
 
     private String nombreUsuario;
@@ -12,14 +13,17 @@ public class Usuario extends Persona {
     // los usuarios siempre son persona física, por eso el tipo de identificación va fijo
     public Usuario(String nombre, String telefono, String correo, String identificacion,
             String nombreUsuario, String contrasena, Rol rol) {
+        
         super(nombre, telefono, correo, TipoIdentificacion.FISICA, identificacion);
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
         this.rol = rol;
+        
         this.activo = true;
     }
 
-    // solo deja entrar si el usuario está activo y coinciden usuario y contraseña
+    // solo deja acceder si el usuario está activo 
+    ///y coinciden usuario y contraseña
     public boolean validarCredenciales(String usuario, String clave) {
         return activo && nombreUsuario.equals(usuario) && contrasena.equals(clave);
     }

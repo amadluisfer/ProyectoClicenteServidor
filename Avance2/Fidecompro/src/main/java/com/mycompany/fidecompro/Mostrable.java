@@ -1,9 +1,9 @@
 package com.mycompany.fidecompro;
 //Estudiante: Luis Fernando Amador Ríos
 
-// toda clase que se pueda mostrar como texto
+// interfaz que implementan las clases que se pueden mostrar como texto
 public interface Mostrable {
 
-    // cada clase decide cómo se muestra
+    // cada clase que la implementa decide qué datos muestra
     String mostrarInformacion();
 }

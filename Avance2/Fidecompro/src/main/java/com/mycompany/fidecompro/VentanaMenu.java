@@ -27,6 +27,7 @@ public class VentanaMenu extends JFrame {
     private JLabel lblAlerta;
     private JLabel lblProductosBajos;
 
+    // recibe el usuario que inició sesión, configura la ventana y carga el resumen
     public VentanaMenu(Usuario usuario) {
         this.usuario = usuario;
         setTitle("Fidecompro · Menú principal");
@@ -47,23 +48,27 @@ public class VentanaMenu extends JFrame {
         });
     }
 
-    // barra de menú, botones grandes de acceso y el panel del resumen
+     // crea la barra de menú, los botones grandes de acceso y el panel del resumen
     private void iniciarComponentes() {
+         // barra de menú con sus opciones, cada una abre su ventana correspondiente
         JMenuBar barra = new JMenuBar();
         JMenu archivo = new JMenu("Archivo");
         JMenuItem itemSalir = new JMenuItem("Cerrar sesión");
         itemSalir.addActionListener(e -> cerrarSesion());
         archivo.add(itemSalir);
+        
         JMenu clientes = new JMenu("Clientes");
         JMenuItem itemClientes = new JMenuItem("Gestión de clientes");
         itemClientes.addActionListener(e -> new VentanaClientes(usuario).setVisible(true));
         clientes.add(itemClientes);
+        
         JMenu productos = new JMenu("Productos");
         JMenuItem itemProductos = new JMenuItem("Productos e inventario");
         itemProductos.addActionListener(e -> new VentanaProductos(usuario).setVisible(true));
         productos.add(itemProductos);
+        
         JMenu facturacion = new JMenu("Facturación");
-        JMenuItem itemFactura = new JMenuItem("Nueva factura");
+        JMenuItem itemFactura = new JMenuItem("Nueva Factura");
         itemFactura.addActionListener(e -> abrirFactura());
         facturacion.add(itemFactura);
         barra.add(archivo);
@@ -72,11 +77,13 @@ public class VentanaMenu extends JFrame {
         barra.add(facturacion);
         setJMenuBar(barra);
 
+        // botones grandes del lado izquierdo
         add(crearMosaico("Clientes", "Registrar y editar", 20, 20));
         add(crearMosaico("Productos", "Catálogo e inventario", 257, 20));
         add(crearMosaico("Nueva factura", "Emitir a un cliente", 20, 255));
         add(crearMosaico("Cerrar sesión", "Volver al inicio", 257, 255));
 
+         // panel del resumen del día al lado derecho
         JPanel resumen = new JPanel(null);
         resumen.setBorder(BorderFactory.createTitledBorder("Resumen del día"));
         resumen.setBounds(500, 15, 470, 455);
@@ -92,6 +99,7 @@ public class VentanaMenu extends JFrame {
         lblClientes = etiqueta("", 220, 90);
         resumen.add(lblClientes);
 
+         // etiqueta  para la alerta de stock bajo
         lblAlerta = new JLabel("");
         lblAlerta.setFont(new Font("SansSerif", Font.BOLD, 14));
         lblAlerta.setForeground(new Color(190, 40, 40));
@@ -120,6 +128,7 @@ public class VentanaMenu extends JFrame {
     private JButton crearMosaico(String titulo, String detalle, int x, int y) {
         JButton b = new JButton("<html><center><font size=5><b>" + titulo + "</b></font><br><br>" + detalle + "</center></html>");
         b.setBounds(x, y, 222, 215);
+        
         b.setBackground(Color.WHITE);
         b.addActionListener(e -> {
             switch (titulo) {
@@ -150,9 +159,9 @@ public class VentanaMenu extends JFrame {
 
     // actualiza los totales y la lista de productos bajo el mínimo
     public void cargarResumen() {
-        lblFacturas.setText(String.valueOf(Datos.facturas.cantidad()));
-        lblTotal.setText(Factura.formatearMonto(Datos.facturas.totalVendido()));
-        lblClientes.setText(String.valueOf(Datos.clientes.listar().size()));
+        lblFacturas.setText(String.valueOf(Datos.facturas.cantidad( )));
+        lblTotal.setText(Factura.formatearMonto(Datos.facturas.totalVendido( )));
+        lblClientes.setText(String.valueOf(Datos.clientes.listar().size( )));
 
         List<Producto> bajos = Datos.inventario.productosBajoMinimo();
         if (bajos.isEmpty()) {
@@ -172,15 +181,16 @@ public class VentanaMenu extends JFrame {
     // si hay una factura a medias pregunta antes de cerrar
     private void cerrarSesion() {
         if (ventanaFactura != null && ventanaFactura.isDisplayable() && ventanaFactura.tieneLineasSinEmitir()) {
-            int r = JOptionPane.showConfirmDialog(this, "Tiene una factura sin emitir. ¿Desea descartarla y cerrar sesión?",
+            int r = JOptionPane.showConfirmDialog(this, "Tiene una factura sin emitir.  ¿Desea descartarla y cerrar la sesión actual?",
                     "Cerrar sesión", JOptionPane.YES_NO_OPTION);
             if (r != JOptionPane.YES_OPTION) {
                 ventanaFactura.toFront();
                 return;
             }
         }
-        // se cierran todas las ventanas abiertas y se vuelve al login
+        // se cierran todas las ventanas abiertas y se vuelve al Inicio de Sesion 
         for (java.awt.Window w : java.awt.Window.getWindows()) {
+            
             w.dispose();
         }
         new VentanaLogin().setVisible(true);

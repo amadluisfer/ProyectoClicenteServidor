@@ -16,6 +16,7 @@ import javax.swing.Timer;
 // ventana de inicio de sesión, después de 3 intentos fallidos se bloquea un minuto
 public class VentanaLogin extends JFrame {
 
+    // componentes de la ventana
     private JTextField txtUsuario;
     private JPasswordField txtContrasena;
     private JLabel lblMensaje;
@@ -23,36 +24,42 @@ public class VentanaLogin extends JFrame {
     // cuenta los intentos fallidos seguidos
     private int intentosFallidos = 0;
 
+    // configura la ventana y crea sus componentes
     public VentanaLogin() {
         setTitle("Fidecompro · Inicio de sesión");
         setSize(470, 340);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setResizable(false);
-        iniciarComponentes();
+        iniciarComponentes()
+                ;
     }
 
-    // arma la ventana con posiciones fijas (layout null)
+    // crea los componentes de la ventana y los ubica con setBounds
     private void iniciarComponentes() {
         JLabel lblTitulo = new JLabel("FIDECOMPRO", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
         lblTitulo.setForeground(new Color(40, 60, 90));
         lblTitulo.setBounds(0, 20, 470, 35);
-        add(lblTitulo);
+        add(lblTitulo) ;
 
         JLabel lblSub = new JLabel("Facturación e inventario · ventas al por mayor", SwingConstants.CENTER);
         lblSub.setBounds(0, 55, 470, 20);
         add(lblSub);
-
+        
+          // panel con borde donde van los datos de ingreso
+          
         JPanel panel = new JPanel(null);
         panel.setBorder(BorderFactory.createTitledBorder("Ingrese sus datos"));
         panel.setBounds(25, 85, 415, 180);
         add(panel);
 
+         // campos de usuario y contraseña
         JLabel lblUsuario = new JLabel("Usuario:");
         lblUsuario.setBounds(20, 30, 90, 25);
         panel.add(lblUsuario);
+        
         txtUsuario = new JTextField();
         txtUsuario.setBounds(110, 30, 280, 25);
         panel.add(txtUsuario);
@@ -60,6 +67,7 @@ public class VentanaLogin extends JFrame {
         JLabel lblContrasena = new JLabel("Contraseña:");
         lblContrasena.setBounds(20, 65, 90, 25);
         panel.add(lblContrasena);
+        
         txtContrasena = new JPasswordField();
         txtContrasena.setBounds(110, 65, 280, 25);
         panel.add(txtContrasena);
@@ -72,8 +80,9 @@ public class VentanaLogin extends JFrame {
         btnIngresar = new JButton("Ingresar");
         btnIngresar.setBounds(130, 130, 150, 32);
         panel.add(btnIngresar);
-
-        JLabel lblPrueba = new JLabel(" Usuarios de prueba: mrodriguez / Admin2026 · cjimenez / Venta2026");
+        
+        JLabel lblPrueba = new JLabel(" Usuarios de prueba: mrodriguez / Admin2026 · amadluis / Venta2026");
+        
         lblPrueba.setBounds(0, 280, 470, 25);
         lblPrueba.setOpaque(true);
         lblPrueba.setBackground(new Color(225, 230, 240));
@@ -85,14 +94,16 @@ public class VentanaLogin extends JFrame {
         getRootPane().setDefaultButton(btnIngresar);
     }
 
-    // valida que no estén vacíos, si están vacíos se pintan de rojo
+     // permite ingresar al sistema con el usuario y la contraseña digitados
     private void ingresar() {
         String usuario = txtUsuario.getText().trim();
         String clave = new String(txtContrasena.getPassword());
         txtUsuario.setBackground(Color.WHITE);
         txtContrasena.setBackground(Color.WHITE);
 
+        // valida que no estén vacíos, si están vacíos se resaltan en rojo
         if (usuario.isEmpty() || clave.isEmpty()) {
+            
             if (usuario.isEmpty()) {
                 txtUsuario.setBackground(new Color(255, 220, 220));
             }
@@ -110,9 +121,12 @@ public class VentanaLogin extends JFrame {
             new VentanaMenu(u).setVisible(true);
             dispose();
         } catch (CredencialesInvalidasException ex) {
+            // si los datos son incorrectos suma un intento y al tercero se bloquea el ingreso
             intentosFallidos++;
+            
             txtContrasena.setText("");
             if (intentosFallidos >= 3) {
+                
                 bloquear();
             } else {
                 lblMensaje.setText(ex.getMessage());
@@ -122,11 +136,13 @@ public class VentanaLogin extends JFrame {
 
     // despues de 3 intentos se bloquea el boton por 1 minuto
     private void bloquear() {
-        lblMensaje.setText("Demasiados intentos fallidos. Intente de nuevo en 1 minuto.");
+        lblMensaje.setText("Demasiados intentos fallidos. Por favor intente de nuevo en 1 minuto.");
         btnIngresar.setEnabled(false);
+        
         // Timer de swing, a los 60 segundos vuelve a habilitar el botón
         Timer timer = new Timer(60000, e -> {
             btnIngresar.setEnabled(true);
+            
             intentosFallidos = 0;
             lblMensaje.setText("");
         });

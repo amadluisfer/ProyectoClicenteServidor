@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class VentanaFactura extends JFrame {
 
     private Usuario usuario;
-    // la factura que se está armando, se crea una nueva cada vez que se emite o se cancela
+    // la factura que se está creando, se crea una nueva cada vez que se emite o se cancela
     private Factura factura;
 
     private JTextField txtCliente;
@@ -40,10 +40,11 @@ public class VentanaFactura extends JFrame {
     public VentanaFactura(Usuario usuario) {
         this.usuario = usuario;
         this.factura = new Factura(usuario);
-        setTitle("Fidecompro · Nueva factura");
+        setTitle("Fidecompro · Emitir nueva factura");
         setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
         setLayout(null);
         setResizable(false);
         iniciarComponentes();
@@ -59,7 +60,7 @@ public class VentanaFactura extends JFrame {
         txtCliente = new JTextField();
         txtCliente.setBounds(110, 30, 160, 25);
         pCliente.add(txtCliente);
-        JButton btnCliente = new JButton("Buscar cliente...");
+        JButton btnCliente = new JButton(">> Buscar cliente...");
         btnCliente.setBounds(285, 30, 130, 25);
         pCliente.add(btnCliente);
         lblCliente = new JLabel("(sin cliente)");
@@ -75,7 +76,7 @@ public class VentanaFactura extends JFrame {
         txtCodigo = new JTextField();
         txtCodigo.setBounds(70, 30, 140, 25);
         pProducto.add(txtCodigo);
-        JButton btnProducto = new JButton("Buscar...");
+        JButton btnProducto = new JButton(">> Buscar...");
         btnProducto.setBounds(225, 30, 90, 25);
         pProducto.add(btnProducto);
         pProducto.add(etiqueta("Cantidad:", 330, 30, 70));
@@ -89,6 +90,7 @@ public class VentanaFactura extends JFrame {
         modelo = new DefaultTableModel(new String[]{"#", "Código", "Descripción", "Cant.", "Precio unit.", "IVA", "Total línea"}, 0) {
             @Override
             public boolean isCellEditable(int fila, int col) {
+                
                 return false;
             }
         };
@@ -110,7 +112,7 @@ public class VentanaFactura extends JFrame {
         JButton btnQuitar = new JButton("Quitar línea");
         btnQuitar.setBounds(15, 552, 100, 25);
         add(btnQuitar);
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnCancelar = new JButton("Cancelar.");
         btnCancelar.setBounds(125, 552, 90, 25);
         add(btnCancelar);
 
@@ -153,7 +155,8 @@ public class VentanaFactura extends JFrame {
         btnCancelar.addActionListener(e -> nuevaFactura());
         btnEmitir.addActionListener(e -> emitir());
         txtDescuento.addActionListener(e -> actualizarTotales());
-        // al salir del campo del descuento se recalculan los totales
+        
+        // al salir del campo del descuento se recalculan los totales.
         txtDescuento.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -176,12 +179,12 @@ public class VentanaFactura extends JFrame {
         return l;
     }
 
-    // busca por identificación y no deja facturar a clientes inactivos
+    // validaci[on de cliente busca por identificación y no deja facturar a clientes inactivos
     private void buscarCliente() {
         try {
             Cliente c = Datos.clientes.buscarPorIdentificacion(txtCliente.getText().trim());
             if (!c.isActivo()) {
-                JOptionPane.showMessageDialog(this, "El cliente está inactivo y no se le puede facturar.");
+                JOptionPane.showMessageDialog(this, "No se puede generar una factura para un cliente inactivo.", "Fidecompro", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             factura.setCliente(c);
@@ -224,8 +227,10 @@ public class VentanaFactura extends JFrame {
             txtCodigo.setText("");
             txtCantidad.setText("1");
             cargarLineas();
+            
         } catch (RegistroNoEncontradoException | StockInsuficienteException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Fidecompro", JOptionPane.WARNING_MESSAGE);
+            
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero.");
         }

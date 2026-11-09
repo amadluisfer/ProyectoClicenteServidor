@@ -10,9 +10,12 @@ public abstract class Persona implements Mostrable, Serializable {
     protected String telefono;
     protected String correo;
     protected TipoIdentificacion tipoIdentificacion;
+    
     protected String identificacion;
 
-    // constructor con los datos comunes, lo usan Cliente y Usuario con super()
+    // constructor con los datos comunes, 
+    // lo usan Cliente y Usuario con super()
+    
     public Persona(String nombre, String telefono, String correo, TipoIdentificacion tipoIdentificacion, String identificacion) {
         this.nombre = nombre;
         this.telefono = telefono;
@@ -21,7 +24,7 @@ public abstract class Persona implements Mostrable, Serializable {
         this.identificacion = identificacion;
     }
 
-    // implementación de Mostrable, las subclases le agregan sus propios datos
+    // implementación de Mostrable y las subclases le agregan cada una sus propios datos
     @Override
     public String mostrarInformacion() {
         return nombre + " (" + identificacion + ") Tel: " + telefono;
@@ -59,4 +62,5 @@ public abstract class Persona implements Mostrable, Serializable {
     public String getIdentificacion() {
         return identificacion;
     }
+    
 }

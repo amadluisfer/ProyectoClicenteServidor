@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// agrupa las categorias y por medio de ellas todos los productos
+/// Permite guardar las categorías del sistema y por medio de ellas se llega a todos los productos
 public class Inventario implements Serializable {
 
     private List<Categoria> categorias;
@@ -18,12 +18,12 @@ public class Inventario implements Serializable {
     public void agregarCategoria(Categoria categoria) {
         categorias.add(categoria);
     }
-
     public List<Categoria> getCategorias() {
         return categorias;
     }
 
-    // recorre cada categoría y sus productos, si no lo encuentra lanza la excepción
+    // recorre cada categoría y sus productos,
+    // si no aprece listado entonces lanza la excepción
     public Producto buscarProducto(String codigo) throws RegistroNoEncontradoException {
         for (Categoria c : categorias) {
             for (Producto p : c.getProductos()) {
@@ -35,7 +35,7 @@ public class Inventario implements Serializable {
         throw new RegistroNoEncontradoException("No existe un producto con el código " + codigo + ".");
     }
 
-    // reutiliza buscarProducto para validar que no se repita el código
+    // reutiliza "buscarProducto" para validar que no se repita el código
     public boolean existeCodigo(String codigo) {
         try {
             buscarProducto(codigo);
@@ -54,7 +54,7 @@ public class Inventario implements Serializable {
         producto.getCategoria().eliminarProducto(producto.getCodigo());
     }
 
-    // todos los productos ordenados por nombre (usa el compareTo de Producto)
+    // todos los productos ordenados por nombre: usa el "compareTo" de Producto
     public List<Producto> listarProductos() {
         List<Producto> lista = new ArrayList<>();
         for (Categoria c : categorias) {
@@ -64,7 +64,8 @@ public class Inventario implements Serializable {
         return lista;
     }
 
-    // solo los activos que llegaron al mínimo, ordenados con ComparadorPorExistencias
+    // solo los activos que llegaron al mínimo
+    // se ordenan con con ComparadorPorExistencias
     public List<Producto> productosBajoMinimo() {
         List<Producto> lista = new ArrayList<>();
         for (Producto p : listarProductos()) {

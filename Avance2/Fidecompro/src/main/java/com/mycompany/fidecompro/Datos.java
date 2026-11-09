@@ -25,17 +25,17 @@ public class Datos {
 
     // datos de ejemplo simulando que el sistema ya tienda datos
     public static void cargarDatosDePrueba() {
-        usuarios.agregar(new Usuario("María Rodríguez", "8888-0001", "mrodriguez@fidecompro.cr", "1-0452-0981",
+        usuarios.agregar(new Usuario("Mario Vargas", "8888-0001", "mvargas40621@fidecompro.cr", "1-0452-0981",
                 "mrodriguez", "Admin2026", Rol.ADMINISTRADOR));
-        usuarios.agregar(new Usuario("Carlos Jiménez", "8888-0002", "cjimenez@fidecompro.cr", "2-0518-0733",
-                "cjimenez", "Venta2026", Rol.VENDEDOR));
+        usuarios.agregar(new Usuario("Luis Amador", "8888-0002", "lamador30737@fidecompro.cr", "1-1473-0737",
+                "amadluis", "Venta2026", Rol.VENDEDOR));
 
         clientes.agregar(new Cliente(TipoIdentificacion.JURIDICA, "3-101-456789", "Abastecedor La Esquina S.A.",
                 "2222-3344", "compras@laesquina.cr", "San José, Desamparados"));
         clientes.agregar(new Cliente(TipoIdentificacion.JURIDICA, "3-102-778899", "Minisúper El Ahorro Ltda.",
                 "2560-7788", "admin@elahorro.cr", "Heredia centro"));
         clientes.agregar(new Cliente(TipoIdentificacion.FISICA, "1-1234-0567", "Pulpería Doña Ana",
-                "8888-1020", "ana.pulperia@gmail.com", "Cartago, Paraíso"));
+                "8888-1020", "ana.pulperia@gmail.com", "San José, Merced, Barrio México"));
 
         Categoria abarrotes = new Categoria("Abarrotes");
         Categoria bebidas = new Categoria("Bebidas");

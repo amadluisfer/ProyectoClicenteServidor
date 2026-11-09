@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            // si no hay archivo todavia se empieza con los datos de prueba
+            // si no hay un archivo con informacion entonces usa los datos demo
             if (!ArchivoDatos.cargar()) {
                 Datos.cargarDatosDePrueba();
                 ArchivoDatos.guardar();
@@ -17,7 +17,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "No se pudo leer el archivo de datos, se cargan los datos de prueba.");
             Datos.cargarDatosDePrueba();
         }
-        // lo primero que se muestra es el inicio de sesión
+        // la primer ventana que se muestra es el inicio de sesión 
         new VentanaLogin().setVisible(true);
     }
 }

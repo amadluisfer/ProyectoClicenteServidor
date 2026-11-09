@@ -75,17 +75,19 @@ public class Factura implements Mostrable, Serializable {
         return calcularSubtotal() * porcentajeDescuento / 100;
     }
 
-    // cada línea calcula su IVA según el tipo de producto
+    // cada línea calcula su IVA según es el tipo de producto
     public double calcularImpuesto() {
         double suma = 0;
         for (DetalleFactura d : detalles) {
             suma += d.calcularImpuesto(porcentajeDescuento);
         }
+        
         return suma;
     }
 
     // total = subtotal - descuento + IVA
     public double calcularTotal() {
+        
         return calcularSubtotal() - calcularDescuento() + calcularImpuesto();
     }
 
@@ -95,6 +97,7 @@ public class Factura implements Mostrable, Serializable {
     }
 
     public String getNumeroFormateado() {
+        
         return String.format("FC-%06d", numero);
     }
 
@@ -103,7 +106,8 @@ public class Factura implements Mostrable, Serializable {
         return String.format("₡%,.2f", monto);
     }
 
-    // implementación de Mostrable, arma el texto completo de la factura con encabezado, líneas y totales
+    // implementación de Mostrable
+    //Arma el texto completo de la factura con encabezado, las líneas y los totales
     @Override
     public String mostrarInformacion() {
         String linea = "=".repeat(66) + "\n";
@@ -121,16 +125,18 @@ public class Factura implements Mostrable, Serializable {
             texto += d.mostrarInformacion() + "\n";
         }
         texto += "-".repeat(66) + "\n";
+        
         texto += String.format("%50s %15s%n", "Subtotal :", formatearMonto(calcularSubtotal()));
         texto += String.format("%50s %15s%n", "Descuento " + porcentajeDescuento + "% :", "-" + formatearMonto(calcularDescuento()));
         texto += String.format("%50s %15s%n", "IVA :", formatearMonto(calcularImpuesto()));
         texto += String.format("%50s %15s%n", "TOTAL :", formatearMonto(calcularTotal()));
         texto += "Método de pago: " + metodoPago + "   Estado: " + estado + "\n";
         texto += linea;
+        
         return texto;
     }
 
-    // guarda la factura en un .txt dentro de la carpeta que se elija
+    // guarda la factura en un .txt dentro de una carpeta definida
     public String generarArchivo(String carpeta) throws IOException {
         File archivo = new File(carpeta, getNumeroFormateado() + ".txt");
         try (FileWriter escritor = new FileWriter(archivo, StandardCharsets.UTF_8)) {
@@ -140,7 +146,7 @@ public class Factura implements Mostrable, Serializable {
     }
 
     // Getters y Setters
-    public int getNumero() {
+    public int getNumero(){
         return numero;
     }
 
@@ -187,7 +193,8 @@ public class Factura implements Mostrable, Serializable {
     public double getPorcentajeDescuento() {
         return porcentajeDescuento;
     }
-
+    
+    //Define el porcentaje de descuento sobre la factua
     public void setPorcentajeDescuento(double porcentajeDescuento) {
         this.porcentajeDescuento = porcentajeDescuento;
     }

@@ -17,7 +17,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-// ventana para registrar, buscar, modificar y eliminar clientes
+// ventana para registrar, buscar, modificar y eliminar clientes en el sistema
 public class VentanaClientes extends JFrame {
 
     private Usuario usuario;
@@ -78,15 +78,16 @@ public class VentanaClientes extends JFrame {
         chkActivo.setBounds(165, 135, 300, 25);
         datos.add(chkActivo);
 
-        JButton btnNuevo = boton("Nuevo", 25, 175, datos);
+        JButton btnNuevo = boton("Nuevo", 25, 176, datos);
         JButton btnGuardar = boton("Guardar", 135, 175, datos);
         JButton btnLimpiar = boton("Limpiar", 245, 175, datos);
         JButton btnEliminar = boton("Eliminar", 355, 175, datos);
         btnEliminar.setBackground(new Color(230, 80, 70));
         btnEliminar.setForeground(Color.WHITE);
-        JButton btnActualizar = boton("Actualizar lista", 465, 175, datos);
+        JButton btnActualizar = boton("Actualizar la lista", 465, 175, datos);
         btnActualizar.setSize(140, 28);
-        // solo el administrador puede eliminar
+        
+        // Condición - solo el administrador puede eliminar
         btnEliminar.setEnabled(usuario.esAdministrador());
 
         add(etiqueta("Buscar:", 15, 240));
@@ -127,6 +128,8 @@ public class VentanaClientes extends JFrame {
             cargarTabla(Datos.clientes.listar());
         });
         btnBuscar.addActionListener(e -> buscar());
+        
+        
         // al seleccionar una fila se cargan sus datos en el formulario
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tabla.getSelectedRow() >= 0) {
@@ -231,7 +234,8 @@ public class VentanaClientes extends JFrame {
         }
     }
 
-    // permite revisar que la identificación tenga los guiones en su lugar y el resto sean números
+    //Formato de identificación 
+    //permite revisar que la identificación tenga los guiones en su lugar y el resto sean números
     private boolean identificacionValida(String id, boolean fisica) {
         int largo = fisica ? 11 : 12;
         int segundoGuion = fisica ? 6 : 5;
@@ -251,7 +255,8 @@ public class VentanaClientes extends JFrame {
         return true;
     }
 
-    // permite revisar que el correo tenga algo antes del @ y un punto después del @
+    // fOrmato del correo  
+    //permite revisar que el correo tenga algo antes del @ y un punto después del @
     private boolean correoValido(String correo) {
         int arroba = correo.indexOf('@');
         if (arroba < 1) {
@@ -270,10 +275,11 @@ public class VentanaClientes extends JFrame {
                         txtNombre.getText().trim(), txtTelefono.getText().trim(), txtCorreo.getText().trim(), txtDireccion.getText().trim());
                 nuevo.setActivo(chkActivo.isSelected());
                 Datos.clientes.agregar(nuevo);
-                JOptionPane.showMessageDialog(this, "Cliente registrado correctamente.");
+                JOptionPane.showMessageDialog(this, "Cliente registrado correctamente");
             } else {
                 seleccionado.setNombre(txtNombre.getText().trim());
                 seleccionado.setTelefono(txtTelefono.getText().trim());
+                
                 seleccionado.setCorreo(txtCorreo.getText().trim());
                 seleccionado.setDireccion(txtDireccion.getText().trim());
                 seleccionado.setActivo(chkActivo.isSelected());
@@ -290,7 +296,7 @@ public class VentanaClientes extends JFrame {
         }
     }
 
-    // pide confirmación antes de eliminar
+    // pide confirmación antes de eliminar el cliente
     private void eliminar() {
         if (seleccionado == null) {
             JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla.");
@@ -299,8 +305,10 @@ public class VentanaClientes extends JFrame {
         int r = JOptionPane.showConfirmDialog(this, "¿Desea eliminar a " + seleccionado.getNombre() + "?",
                 "Eliminar cliente", JOptionPane.YES_NO_OPTION);
         if (r != JOptionPane.YES_OPTION) {
+            
             return;
         }
+        
         // si ya tiene facturas no se borra, se desactiva para no perder el historial
         if (Datos.facturas.clienteTieneFacturas(seleccionado)) {
             seleccionado.setActivo(false);
@@ -311,6 +319,7 @@ public class VentanaClientes extends JFrame {
         }
         Datos.guardarCambios();
         limpiar();
+        
         cargarTabla(Datos.clientes.listar());
     }
 }

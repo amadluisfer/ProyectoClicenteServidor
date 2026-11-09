@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// guarda todos los clientes y tiene las búsquedas
+// guarda los clientes y permite agregarlos, eliminarlos y buscarlos por nombre o identificación
 public class RegistroClientes implements Serializable {
 
-    // la llave es el id del cliente
+    // HashMap que guarda los clientes usando su id como llave para encontrarlos rápido
     private Map<Integer, Cliente> clientes;
 
     public RegistroClientes() {
@@ -31,27 +31,31 @@ public class RegistroClientes implements Serializable {
     }
 
     public boolean existeIdentificacion(String identificacion) {
-        for (Cliente c : clientes.values()) {
+        for (Cliente c : clientes.values( )) {
             if (c.getIdentificacion().equals(identificacion)) {
+                
                 return true;
             }
         }
+        
         return false;
     }
 
-    // se usa en la factura para buscar al cliente exacto
+    // buscar4 un cliente por su cédula completa, si no existe lanza la excepción
     public Cliente buscarPorIdentificacion(String identificacion) throws RegistroNoEncontradoException {
         for (Cliente c : clientes.values()) {
-            if (c.getIdentificacion().equals(identificacion)) {
+            if (c.getIdentificacion(). equals(identificacion)) {
+                
                 return c;
             }
         }
         throw new RegistroNoEncontradoException("No existe un cliente con la identificación " + identificacion + ".");
     }
 
-    // busca por parte del nombre o de la identificacion, sin importar mayusculas
+    // busca por parte del nombre o de la identificacion, no discrmiina las mayusculas
     public List<Cliente> buscar(String texto) {
         List<Cliente> resultado = new ArrayList<>();
+        
         String t = texto.toLowerCase();
         for (Cliente c : clientes.values()) {
             if (c.getNombre().toLowerCase().contains(t) || c.getIdentificacion().contains(t)) {
@@ -63,7 +67,7 @@ public class RegistroClientes implements Serializable {
         return resultado;
     }
 
-    // con el texto vacío todos coinciden, entonces devuelve la lista completa
+    //// devuelve todos los clientes ordenados por nombre, reutilizando buscar con texto vacío
     public List<Cliente> listar() {
         return buscar("");
     }

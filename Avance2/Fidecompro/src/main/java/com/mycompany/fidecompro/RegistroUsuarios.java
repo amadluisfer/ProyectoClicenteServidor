@@ -8,7 +8,7 @@ import java.util.Map;
 // guarda los usuarios del sistema y valida el inicio de sesión
 public class RegistroUsuarios implements Serializable {
 
-    // la llave es el nombre de usuario
+    // HashMap que guarda los usuarios usando el nombre de usuario como la llave
     private Map<String, Usuario> usuarios;
 
     public RegistroUsuarios() {

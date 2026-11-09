@@ -3,7 +3,8 @@ package com.mycompany.fidecompro;
 
 import java.io.Serializable;
 
-// clase padre de todos los productos, cada tipo calcula su propio IVA
+// clase padre de todos los productos
+//cada tipo calcula su propio IVA
 public abstract class Producto implements Mostrable, Comparable<Producto>, Serializable {
 
     protected String codigo;
@@ -13,9 +14,10 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
     protected double valorVenta;
     protected int existencias;
     protected int stockMinimo;
+    
     protected boolean activo;
 
-    // constructor con los datos que tienen todos los productos, las subclases lo llaman con super()
+    // constructor con los datos que tienen todos los productos, las subclases lo llaman usando super()
     public Producto(String codigo, String nombre, Categoria categoria, double valorCompra,
             double valorVenta, int existencias, int stockMinimo) {
         this.codigo = codigo;
@@ -28,7 +30,7 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
         this.activo = true;
     }
 
-    // cada subclase lo implementa distinto
+    // método abstracto, cada tipo de producto define su porcentaje de IVA
     public abstract double obtenerPorcentajeImpuesto();
 
     public abstract String obtenerTipo();
@@ -41,19 +43,19 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
         existencias -= cantidad;
     }
 
-    // para la alerta de stock bajo
+    //Revisa si las existencias llegaron al mínimo, se usa para generar una alerta de stock bajo
     public boolean necesitaReabastecer() {
         return existencias <= stockMinimo;
     }
 
-    // implementación de Mostrable, el tipo y el IVA dependen de la subclase (polimorfismo)
+    // implementación de Mostrable, el tipo y el IVA dependen de la subclase correspondiente 
     @Override
     public String mostrarInformacion() {
         return codigo + " - " + nombre + " (" + obtenerTipo() + ") precio: " + valorVenta
                 + " IVA: " + (int) (obtenerPorcentajeImpuesto() * 100) + "% stock: " + existencias;
     }
 
-    // ordena por nombre
+    
     @Override
     public int compareTo(Producto otro) {
         return nombre.compareToIgnoreCase(otro.nombre);
@@ -109,6 +111,7 @@ public abstract class Producto implements Mostrable, Comparable<Producto>, Seria
     }
 
     public void setStockMinimo(int stockMinimo) {
+        
         this.stockMinimo = stockMinimo;
     }
 

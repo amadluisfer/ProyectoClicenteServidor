@@ -5,22 +5,24 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.TreeMap;
 
-// guarda las facturas emitidas
+// Permite guardar las facturas emitidas desde el sistema
 public class RegistroFacturas implements Serializable {
 
-    // TreeMap para que queden ordenadas por numero
+    // TreeMap que guarda las facturas ordenadas por su número
     private TreeMap<Integer, Factura> facturas;
 
     public RegistroFacturas() {
         facturas = new TreeMap<>();
     }
 
-    // revisa todo, descuenta el stock y le pone el siguiente numero
+    // Permite que cuando se emite la factura se validen los datos
+    //revisa el stock, descuenta las existencias del inventario  y le asigne #de factura y la fecha de emision
     public void emitir(Factura factura) throws StockInsuficienteException {
         if (factura.getCliente() == null || factura.getDetalles().isEmpty()) {
             throw new IllegalArgumentException("Debe seleccionar un cliente y agregar al menos un producto.");
         }
-        if (factura.getPorcentajeDescuento() < 0 || factura.getPorcentajeDescuento() > 100) {
+        if (factura.getPorcentajeDescuento() < 0 || factura.getPorcentajeDescuento() > 100)
+        {
             throw new IllegalArgumentException("El descuento debe estar entre 0 y 100.");
         }
         // primero se revisa que alcance todo, asi no queda nada a medias
@@ -33,7 +35,7 @@ public class RegistroFacturas implements Serializable {
         for (DetalleFactura d : factura.getDetalles()) {
             d.getProducto().descontarExistencias(d.getCantidad());
         }
-        // el número sigue después de la última factura guardada
+        // se calcula el siguiente número de factura y se le asigna con la fecha y el estado antes de guardarla
         int siguiente = facturas.isEmpty() ? 1 : facturas.lastKey() + 1;
         factura.setNumero(siguiente);
         factura.setFecha(LocalDateTime.now());
@@ -41,7 +43,7 @@ public class RegistroFacturas implements Serializable {
         facturas.put(siguiente, factura);
     }
 
-    // para saber si se puede borrar el cliente o solo desactivarlo
+    ///// revisa si el cliente tiene alguna factura registrada
     public boolean clienteTieneFacturas(Cliente cliente) {
         for (Factura f : facturas.values()) {
             if (f.getCliente().getId() == cliente.getId()) {
@@ -51,7 +53,7 @@ public class RegistroFacturas implements Serializable {
         return false;
     }
 
-    // igual que con los clientes pero para los productos
+    // revisa si el producto aparece en alguna factura registrada
     public boolean productoEnFacturas(Producto producto) {
         for (Factura f : facturas.values()) {
             for (DetalleFactura d : f.getDetalles()) {
@@ -67,14 +69,16 @@ public class RegistroFacturas implements Serializable {
         return facturas.size();
     }
 
-    // para el resumen del menú, no cuenta las anuladas
+    // suma el total de las facturas emitidas, se usa en el resumen del menú
     public double totalVendido() {
+        
         double total = 0;
-        for (Factura f : facturas.values()) {
+        for (Factura f : facturas.values(  )) {
             if (f.getEstado() == EstadoFactura.EMITIDA) {
                 total += f.calcularTotal();
             }
         }
+        
         return total;
     }
 }
